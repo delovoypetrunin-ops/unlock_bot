@@ -1,19 +1,19 @@
 import asyncio
 import logging
 import sqlite3
-from pathlib import Path
+import os
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.enums import ContentType
 
-# ========== ВАШИ ДАННЫЕ ==========
-BOT_TOKEN = "8976780750:AAHGnm_k1p_n-yVriN4ux5znILN_m3tXPyw"
-ADMIN_ID = 2118542890
-CARD_NUMBER = "2202 2080 1111 2308"
+# ========== ТОКЕН ИЗ ПЕРЕМЕННЫХ ОКРУЖЕНИЯ ==========
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+ADMIN_ID = int(os.getenv("ADMIN_ID", "0"))
+CARD_NUMBER = os.getenv("CARD_NUMBER", "2202 2080 1111 2308")
 SUPPORT = "@PETRUNINNN"
-# =================================
+# =================================================
 
 PLANS = {
     "1": ("1 месяц", 429, "🎵"),
@@ -324,7 +324,11 @@ async def credentials(message: Message):
 
 async def main():
     if not BOT_TOKEN:
-        print("❌ ОШИБКА: Токен не вставлен!")
+        print("❌ ОШИБКА: Токен не найден в переменных окружения!")
+        return
+    
+    if not ADMIN_ID:
+        print("❌ ОШИБКА: ADMIN_ID не найден в переменных окружения!")
         return
     
     print("✅ Бот запущен!")
